@@ -164,17 +164,12 @@ public class SorteioTime extends AppCompatActivity {
     }
 
     public void sortearJogadores(){
-        Log.d("VELOCIDADE", "ANTESADAPTER");
+
         this.listJog = db.buscar(idTime);
         this.jogadores1 = new ArrayList<Jogador>();
         this.jogadores2 = new ArrayList<Jogador>();
         this.jogadores1.clear();
         this.jogadores2.clear();
-
-        this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
-        this.lstJogador1.setAdapter(jogadorAdapter1);
-        this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
-        this.lstJogador2.setAdapter(jogadorAdapter2);
 
         List<Jogador>goleiro = new ArrayList<Jogador>();
         int index = 0;
@@ -215,7 +210,6 @@ public class SorteioTime extends AppCompatActivity {
         float media1 = forca1 / jogadores1.size();
         float media2 = forca2 / jogadores2.size();
 
-
         DecimalFormat decimalFormat = new DecimalFormat("0.0");
         rtTime1.setStepSize((float) 0.1);
         rtTime2.setStepSize((float) 0.1);
@@ -249,6 +243,12 @@ public class SorteioTime extends AppCompatActivity {
             }
         }
 
+        Log.d("VELOCIDADE", "ANTESADAPTER");
+        this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
+        this.lstJogador1.setAdapter(jogadorAdapter1);
+        this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
+        this.lstJogador2.setAdapter(jogadorAdapter2);
+
         registerForContextMenu(lstJogador1);
         registerForContextMenu(lstJogador2);
         Log.d("VELOCIDADE", "DEPOISADAPTER");
@@ -258,7 +258,7 @@ public class SorteioTime extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sorteio, menu);
+        //getMenuInflater().inflate(R.menu.menu_sorteio, menu);
         return true;
     }
 
@@ -268,22 +268,6 @@ public class SorteioTime extends AppCompatActivity {
 
         if (id==android.R.id.home) {
             finish();
-        }
-        if (id==R.id.action_sortear){
-            tentativas = 0;
-            Thread myThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    mUiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            sortearJogadores();
-                        }
-                    });
-                }
-            });
-            myThread.start();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

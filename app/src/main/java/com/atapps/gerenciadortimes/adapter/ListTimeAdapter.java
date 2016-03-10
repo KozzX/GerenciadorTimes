@@ -68,7 +68,6 @@ public class ListTimeAdapter extends BaseAdapter {
         txtQtdJogadores.setText("("+db.buscar(time.getId()).size()+")");
 
         if (time.getCirclePath()!=null){
-            //Log.d("IMAGENOME",time.getId() + "\n " + time.getNome() + "\n " + time.getCirclePath() + "\n " + time.getFotoPath());
             Bitmap bitmap = BitmapFactory.decodeFile(time.getCirclePath());
             imgItemList.setImageBitmap(bitmap);
         }

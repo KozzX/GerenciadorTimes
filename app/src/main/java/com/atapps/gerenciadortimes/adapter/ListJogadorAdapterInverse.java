@@ -3,6 +3,7 @@ package com.atapps.gerenciadortimes.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,6 @@ public class ListJogadorAdapterInverse extends BaseAdapter {
 
         convertView = inflater.inflate(R.layout.item_list_jogador_inverse,null);
 
-        db = new DaoJogador(convertView.getContext());
-
         TextView txtNomeJogador = (TextView) convertView.findViewById(R.id.txtNomeJogador);
         TextView txtPosicao = (TextView) convertView.findViewById(R.id.txtPosicao);
         RatingBar forca = (RatingBar) convertView.findViewById(R.id.ratingJogador);
@@ -73,10 +72,12 @@ public class ListJogadorAdapterInverse extends BaseAdapter {
 
 
         if (jogador.getCirclePath()!=null){
-            //Log.d("IMAGENOME",time.getId() + "\n " + time.getNome() + "\n " + time.getCirclePath() + "\n " + time.getFotoPath());
             Bitmap bitmap = BitmapFactory.decodeFile(jogador.getCirclePath());
             imgItemList.setImageBitmap(bitmap);
         }
+        Log.d("VELOCIDADE","ADAPTER2 " + position + "\n" +
+                " " + jogadores.get(position).getId() + "\n" +
+                " " + jogadores.get(position).getNome());
 
         return convertView;
     }
