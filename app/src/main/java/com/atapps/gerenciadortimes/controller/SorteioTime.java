@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -56,7 +58,11 @@ public class SorteioTime extends AppCompatActivity {
     private TextView txtPlacar2;
     private int placar1 = 0;
     private int placar2 = 0;
-    private final float DIFERENCATIME = 2f;
+    private final float DIFERENCATIME = 1f;
+    private boolean running = false;
+    private Chronometer chrono;
+    private long lastPause;
+    private int contPlay = 0;
 
 
     @Override
@@ -74,6 +80,7 @@ public class SorteioTime extends AppCompatActivity {
         rtTime2 = (RatingBar) findViewById(R.id.rtTim2);
         txtPlacar1 = (TextView) findViewById(R.id.txtPlacar1);
         txtPlacar2 = (TextView) findViewById(R.id.txtPlacar2);
+        chrono = (Chronometer) findViewById(R.id.chronometer);
 
         extras = getIntent().getExtras();
         if (extras!=null) {
@@ -84,25 +91,55 @@ public class SorteioTime extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (lstJogador1.getCount() > 0){
+                    if ((contPlay==0) && (running == false)){
+                        contPlay = 1;
+                        running = true;
+                        chrono.setBase(SystemClock.elapsedRealtime());
+                        chrono.start();
+                    }else if ((running == false)){
+                        running = true;
+                        chrono.setBase(chrono.getBase() + SystemClock.elapsedRealtime() - lastPause);
+                        chrono.start();
+                    }else{
+                        running = false;
+                        lastPause = SystemClock.elapsedRealtime();
+                        chrono.stop();
+                    }
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SorteioTime.this);
+                    builder.setTitle(R.string.mensagem);
+                    builder.setMessage(R.string.erro_inicio)
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //do things
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
         });
         this.db = new DaoJogador(this);
 
-
-        Thread myThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    mUiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            sortearJogadores();
-                        }
-                    });
+        lstJogador1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (running == true){
+                    view.showContextMenu();
                 }
+            }
         });
-        myThread.start();
+        lstJogador2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (running == true){
+                    view.showContextMenu();
+                }
+
+            }
+        });
 
     }
 
@@ -111,6 +148,14 @@ public class SorteioTime extends AppCompatActivity {
         this.listJog = db.buscar(idTime);
         this.jogadores1 = new ArrayList<Jogador>();
         this.jogadores2 = new ArrayList<Jogador>();
+        this.jogadores1.clear();
+        this.jogadores2.clear();
+
+        this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
+        this.lstJogador1.setAdapter(jogadorAdapter1);
+        this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
+        this.lstJogador2.setAdapter(jogadorAdapter2);
+
         List<Jogador>goleiro = new ArrayList<Jogador>();
         int index = 0;
         float forca1 = 0;
@@ -163,7 +208,7 @@ public class SorteioTime extends AppCompatActivity {
         Log.d("MEDIA", rtTime1.getRating() + " " + rtTime2.getRating());
 
 
-        Log.d("MEDIAS", media1 + " - " + media2 + " - " + (media1-media2));
+        Log.d("MEDIAS", media1 + " - " + media2 + " - " + (media1 - media2));
         if (((media1-media2)>DIFERENCATIME) || ((media1-media2) < (-DIFERENCATIME))){
             tentativas++;
             if (tentativas > 20){
@@ -186,10 +231,7 @@ public class SorteioTime extends AppCompatActivity {
         }
 
 
-        this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
-        this.lstJogador1.setAdapter(jogadorAdapter1);
-        this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
-        this.lstJogador2.setAdapter(jogadorAdapter2);
+
         registerForContextMenu(lstJogador1);
         registerForContextMenu(lstJogador2);
         Log.d("VELOCIDADE", "DEPOISADAPTER");

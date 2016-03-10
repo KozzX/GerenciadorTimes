@@ -62,14 +62,15 @@
                 android:layout_alignLeft="@+id/rtTim2"
                 android:layout_alignStart="@+id/rtTim2" />
 
-            <TextView
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:textSize="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="00:00"
-                android:id="@+id/textView"
-                android:layout_alignTop="@+id/txtPlacar2"
+                android:text="Chronometer"
+                android:layout_alignTop="@+id/txtPlacar1"
                 android:layout_centerHorizontal="true" />
+
         </RelativeLayout>
 
         <LinearLayout
