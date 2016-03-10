@@ -141,6 +141,26 @@ public class SorteioTime extends AppCompatActivity {
             }
         });
 
+        final Thread myThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mUiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sortearJogadores();
+                    }
+                });
+            }
+        });
+        myThread.start();
+
+
     }
 
     public void sortearJogadores(){
@@ -227,10 +247,7 @@ public class SorteioTime extends AppCompatActivity {
                 Log.d("MEDIAS ACIMA", media1 + " - " + media2 + " - " + (media1 - media2) + "tent" + tentativas);
                 sortearJogadores();
             }
-
         }
-
-
 
         registerForContextMenu(lstJogador1);
         registerForContextMenu(lstJogador2);
@@ -279,11 +296,13 @@ public class SorteioTime extends AppCompatActivity {
             menu.setHeaderTitle(jogadorAdapter1.getItem(info.position).getNome());
             menu.add(1, 0, 0, R.string.marcar_gol);
             menu.add(1, 1, 0, R.string.retirar_gol);
+            menu.add(1, 2, 0, R.string.trocar_time);
 
         }else if (v.getId()==R.id.lstJogador2){
             menu.setHeaderTitle(jogadorAdapter2.getItem(info.position).getNome());
             menu.add(2, 0, 0, R.string.marcar_gol);
             menu.add(2, 1, 0, R.string.retirar_gol);
+            menu.add(2, 2, 0, R.string.trocar_time);
 
         }
 
@@ -303,6 +322,13 @@ public class SorteioTime extends AppCompatActivity {
                 placar1 = placar1 - 1;
                 txtPlacar1.setText(placar1+"");
 
+            }else if (item.getItemId()==2){
+                this.jogadores2.add(jogadorAdapter1.getItem(info.position));
+                this.jogadores1.remove(info.position);
+                this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
+                this.lstJogador1.setAdapter(jogadorAdapter1);
+                this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
+                this.lstJogador2.setAdapter(jogadorAdapter2);
             }
         }else if(item.getGroupId()==2){
             if (item.getItemId()==0){
@@ -314,6 +340,14 @@ public class SorteioTime extends AppCompatActivity {
                 //jogadorAdapter2.getItem(info.position).getId());
                 placar2 = placar2 - 1;
                 txtPlacar2.setText(placar2+"");
+
+            }else if (item.getItemId()==2){
+                this.jogadores1.add(jogadorAdapter2.getItem(info.position));
+                this.jogadores2.remove(info.position);
+                this.jogadorAdapter1 = new ListJogadorAdapter(this,jogadores1);
+                this.lstJogador1.setAdapter(jogadorAdapter1);
+                this.jogadorAdapter2 = new ListJogadorAdapterInverse(this,jogadores2);
+                this.lstJogador2.setAdapter(jogadorAdapter2);
             }
 
         }

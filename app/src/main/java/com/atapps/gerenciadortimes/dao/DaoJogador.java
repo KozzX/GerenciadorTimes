@@ -39,6 +39,25 @@ public class DaoJogador {
         atualizarInfo(ultimoId());
     }
 
+    public void inserirComId(Jogador jogador){
+        ContentValues valores = new ContentValues();
+        valores.put("CODJOG", jogador.getId());
+        valores.put("NOMJOG", jogador.getNome());
+        valores.put("CODTIM", jogador.getIdTime());
+        valores.put("TELJOG", jogador.getTelefone());
+        if (jogador.isGoleiro()){
+            valores.put("INDGOL", 1);
+        }else{
+            valores.put("INDGOL", 0);
+        }
+        valores.put("FORJOG", jogador.getForca());
+        valores.put("IMGJOG", jogador.getFotoPath());
+        valores.put("CIRJOG", jogador.getCirclePath());
+
+        db.insert("JOGADOR", null, valores);
+        atualizarInfo(ultimoId());
+    }
+
     public void atualizar(Jogador jogador){
         ContentValues valores = new ContentValues();
         valores.put("NOMJOG", jogador.getNome());
@@ -87,6 +106,35 @@ public class DaoJogador {
         return list;
 
     }
+
+    public List<Jogador> buscarTodos(){
+        List<Jogador>list = new ArrayList<Jogador>();
+        String[] colunas = new String[]{"CODJOG", "NOMJOG", "CODTIM", "TELJOG", "INDGOL", "FORJOG", "IMGJOG", "CIRJOG"};
+        Cursor cursor = db.query("JOGADOR", colunas, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        for (int i = 0; i < cursor.getCount(); i++){
+            Jogador jogador = new Jogador();
+            jogador.setId(cursor.getLong(0));
+            jogador.setNome(cursor.getString(1));
+            jogador.setIdTime(cursor.getLong(2));
+            jogador.setTelefone(cursor.getString(3));
+            if (cursor.getInt(4)==1){
+                jogador.setGoleiro(true);
+            }else if (cursor.getInt(4)==0){
+                jogador.setGoleiro(false);
+            }
+            jogador.setForca(cursor.getFloat(5));
+            jogador.setFotoPath(cursor.getString(6));
+            jogador.setCirclePath(cursor.getString(7));
+            list.add(jogador);
+
+            cursor.moveToNext();
+        }
+        return list;
+
+    }
+
     public Jogador buscarTimePorId(Long id){
         String[] colunas = new String[]{"CODJOG", "NOMJOG", "CODTIM", "TELJOG", "INDGOL", "FORJOG", "IMGJOG", "CIRJOG"};
         Cursor cursor = db.query("JOGADOR",colunas, "CODJOG = "+ id, null, null, null, null);

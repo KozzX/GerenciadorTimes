@@ -70,9 +70,6 @@ public class TelaListaTime extends AppCompatActivity {
 
     public void listaTimes(){
         this.times = db.buscar();
-        for (int i = 0; i<times.size(); i++){
-            Log.d("BANCO",times.get(i).getNome());
-        }
         this.timeAdapter = new ListTimeAdapter(this,times);
         this.lstTime.setAdapter(timeAdapter);
     }

@@ -27,6 +27,7 @@
     <string name="marcar_gol">Marcar Gol</string>
     <string name="retirar_gol">Retirar Gol</string>
     <string name="erro_inicio">É necessário sortear o time antes de iniciar o jogo.</string>
+    <string name="trocar_time">Trocar de time</string>
 
 
 </resources>

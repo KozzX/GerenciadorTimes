@@ -34,6 +34,20 @@ public class DaoTime {
         atualizarInfo(ultimoId());
     }
 
+    public void inserirComId(Time time){
+        ContentValues valores = new ContentValues();
+        valores.put("CODTIM", time.getId());
+        valores.put("NOMTIM", time.getNome());
+        valores.put("DIATIM", time.getDia());
+        valores.put("HORTIM", time.getHora());
+        valores.put("LOCTIM", time.getLocal());
+        valores.put("IMGTIM", time.getFotoPath());
+        valores.put("CIRTIM", time.getCirclePath());
+
+        db.insert("TIME", null, valores);
+        atualizarInfo(ultimoId());
+    }
+
     public void atualizar(Time time){
         ContentValues valores = new ContentValues();
         valores.put("NOMTIM", time.getNome());
