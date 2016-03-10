@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/list_image"
+            android:layout_width="55dip"
+            android:layout_height="55dip"
+            android:src="@drawable/ball"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#FF000000"/>
+
+    </LinearLayout>
+
+    <!-- Title Of Song-->
+    <TextView
+        android:id="@+id/txtNomeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <!-- Artist Name -->
+    <TextView
+        android:id="@+id/txtDiaTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNomeTime"
+        android:textColor="#343434"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Dia + Hora"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <!-- Rightend Duration -->
+    <TextView
+        android:id="@+id/txtQtdJogadores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="(0)"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#343434"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingRight="10dp" />
+
+    <!-- Rightend Arrow -->
+
+</RelativeLayout>
